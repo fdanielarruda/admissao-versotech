@@ -30,12 +30,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="colors" class="form-label">Cores</label>
-                <select class="form-control" id="colors" name="colors[]" multiple>
+                <label class="form-label">Cores</label>
+                <div class="border p-3 rounded">
                     <?php foreach ($colors as $color): ?>
-                        <option value="<?= $color->id ?>" <?= in_array($color->id, $user_colors) ? 'selected' : '' ?>><?= $color->name ?></option>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="color-<?= $color->id ?>" name="colors[]" value="<?= $color->id ?>" <?= in_array($color->id, $user_colors) ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="color-<?= $color->id ?>"><?= $color->name ?></label>
+                        </div>
                     <?php endforeach; ?>
-                </select>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-success">Salvar Alterações</button>
