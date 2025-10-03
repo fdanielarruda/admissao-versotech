@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../Models/User.php';
 require_once __DIR__ . '/../Models/Color.php';
+require_once __DIR__ . '/../Services/UserService.php';
 
 class UserController
 {
@@ -27,16 +28,9 @@ class UserController
             die("Nome e e-mail são obrigatórios!");
         }
 
-        $user_id = User::create([
-            'name' => $name,
-            'email' => $email
-        ]);
+        $user_id = UserService::createAndSyncColors($name, $email, $color_ids);
 
         if ($user_id) {
-            if (!empty($color_ids)) {
-                User::syncColors($user_id, $color_ids);
-            }
-
             header('Location: index.php?page=users');
             exit;
         } else {
@@ -46,7 +40,7 @@ class UserController
 
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = UserService::findWithColors($id);
 
         if ($user === null) {
             header("HTTP/1.0 404 Not Found");
@@ -55,7 +49,7 @@ class UserController
         }
 
         $colors = Color::list();
-        $user_colors = User::getUserColorIds($user->id);
+        $user_colors = $user->user_colors_ids;
 
         include __DIR__ . '/../Views/users/edit.php';
     }
@@ -65,29 +59,19 @@ class UserController
         $id = $_POST['id'] ?? 0;
         $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
-
         $color_ids = $_POST['colors'] ?? [];
 
         if (empty($id) || empty($name) || empty($email)) {
             die("ID, Nome e E-mail são obrigatórios para a atualização!");
         }
 
-        $success = User::update($id, [
-            'name' => $name,
-            'email' => $email
-        ]);
+        $success = UserService::updateAndSyncColors($id, $name, $email, $color_ids);
 
         if ($success) {
-            $syncSuccess = User::syncColors($id, $color_ids);
-
-            if ($syncSuccess) {
-                header('Location: index.php?page=users&message=updated');
-                exit;
-            } else {
-                die("Erro ao sincronizar as cores do usuário.");
-            }
+            header('Location: index.php?page=users&message=updated');
+            exit;
         } else {
-            die("Erro ao salvar as alterações do usuário (Nome/Email).");
+            die("Erro ao salvar as alterações do usuário.");
         }
     }
 
