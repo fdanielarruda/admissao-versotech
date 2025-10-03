@@ -38,6 +38,12 @@
                         </td>
                     </tr>
                 <?php endforeach; ?>
+
+                <?php if (empty($users)): ?>
+                    <tr>
+                        <td colspan="4">Nenhum registro encontrado</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
