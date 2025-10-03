@@ -12,6 +12,9 @@
 <body>
     <div class="container">
         <h1>Lista de Usuários</h1>
+
+        <?php include __DIR__ . '/../errors.php'; ?>
+
         <a href="?page=user_create" class="btn btn-primary btn-sm mb-3">Novo usuário</a>
 
         <table class="table table-striped table-hover table-bordered table-sm">

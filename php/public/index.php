@@ -1,24 +1,21 @@
 <?php
-
+session_start();
 require_once __DIR__ . '/../app/Controllers/UserController.php';
 
 $page = $_GET['page'] ?? 'users';
 
 switch ($page) {
     case 'users':
-        $controller = new UserController();
-        $controller->index();
+        (new UserController())->index();
         break;
 
     case 'user_create':
-        $controller = new UserController();
-        $controller->create();
+        (new UserController())->create();
         break;
 
     case 'user_store':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller = new UserController();
-            $controller->store();
+            (new UserController())->store();
         } else {
             header('Location: index.php?page=user_create');
         }
@@ -26,15 +23,12 @@ switch ($page) {
 
     case 'user_edit':
         $id = $_GET['id'] ?? null;
-
-        $controller = new UserController();
-        $controller->edit($id);
+        (new UserController())->edit($id);
         break;
 
     case 'user_update':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller = new UserController();
-            $controller->update();
+            (new UserController())->update();
         } else {
             header('Location: index.php?page=user_create');
         }
@@ -42,9 +36,7 @@ switch ($page) {
 
     case 'user_delete':
         $id = $_GET['id'] ?? null;
-
-        $controller = new UserController();
-        $controller->delete($id);
+        (new UserController())->delete($id);
         break;
 
     default:

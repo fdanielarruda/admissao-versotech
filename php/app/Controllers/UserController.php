@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../Models/User.php';
 require_once __DIR__ . '/../Models/Color.php';
 require_once __DIR__ . '/../Services/UserService.php';
+require_once __DIR__ . '/../Services/Feedback.php';
 
 class UserController
 {
@@ -25,16 +26,15 @@ class UserController
         $color_ids = $_POST['colors'] ?? [];
 
         if (empty($name) || empty($email)) {
-            die("Nome e e-mail são obrigatórios!");
+            Feedback::setErrorAndRedirect("Nome e e-mail são obrigatórios!", 'index.php?page=user_create');
         }
 
         $user_id = UserService::createAndSyncColors($name, $email, $color_ids);
 
         if ($user_id) {
-            header('Location: index.php?page=users');
-            exit;
+            Feedback::setSuccessAndRedirect("Usuário {$name} cadastrado com sucesso!", 'index.php?page=users');
         } else {
-            die("Erro ao salvar o usuário.");
+            Feedback::setErrorAndRedirect("Erro ao salvar o usuário. Tente novamente.", 'index.php?page=user_create');
         }
     }
 
@@ -43,9 +43,7 @@ class UserController
         $user = UserService::findWithColors($id);
 
         if ($user === null) {
-            header("HTTP/1.0 404 Not Found");
-            include __DIR__ . '/../Views/404.php';
-            exit;
+            Feedback::setErrorAndRedirect("Usuário inválido ou não encontrado.", 'index.php?page=users');
         }
 
         $colors = Color::list();
@@ -60,18 +58,18 @@ class UserController
         $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
         $color_ids = $_POST['colors'] ?? [];
+        $redirect_error = 'index.php?page=user_edit&id=' . $id;
 
         if (empty($id) || empty($name) || empty($email)) {
-            die("ID, Nome e E-mail são obrigatórios para a atualização!");
+            Feedback::setErrorAndRedirect("ID, Nome e E-mail são obrigatórios para a atualização!", $redirect_error);
         }
 
         $success = UserService::updateAndSyncColors($id, $name, $email, $color_ids);
 
         if ($success) {
-            header('Location: index.php?page=users&message=updated');
-            exit;
+            Feedback::setSuccessAndRedirect("Usuário {$name} atualizado com sucesso!", 'index.php?page=users');
         } else {
-            die("Erro ao salvar as alterações do usuário.");
+            Feedback::setErrorAndRedirect("Erro ao salvar as alterações do usuário. Tente novamente.", $redirect_error);
         }
     }
 
@@ -80,13 +78,11 @@ class UserController
         $user = User::find($id);
 
         if ($user === null) {
-            header("HTTP/1.0 404 Not Found");
-            include __DIR__ . '/../Views/404.php';
-            exit;
+            Feedback::setErrorAndRedirect("Usuário inválido ou não encontrado.", 'index.php?page=users');
         }
 
         User::delete($id);
 
-        header('Location: index.php?page=users');
+        Feedback::setSuccessAndRedirect("Usuário {$user->name} excluído com sucesso!", 'index.php?page=users');
     }
 }

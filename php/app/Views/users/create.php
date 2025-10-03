@@ -13,6 +13,8 @@
     <div class="container">
         <h1 class="my-4">Novo usuário</h1>
 
+        <?php include __DIR__ . '/../errors.php'; ?>
+
         <form action="index.php?page=user_store" method="POST">
             <div class="mb-3">
                 <label for="name" class="form-label">Nome</label>

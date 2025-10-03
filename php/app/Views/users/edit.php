@@ -13,6 +13,8 @@
     <div class="container">
         <h1 class="my-4">Editar usuário</h1>
 
+        <?php include __DIR__ . '/../errors.php'; ?>
+
         <form action="index.php?page=user_update&id=<?= $user->id ?>" method="POST">
 
             <input type="hidden" name="id" value="<?= $user->id ?>">
