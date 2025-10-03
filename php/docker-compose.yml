@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  app:
+    container_name: admissao-versotech
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7070:7070"
+    volumes:
+      - .:/var/www/html
+    restart: always
