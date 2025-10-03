@@ -1,45 +1,64 @@
 <?php
+
 session_start();
+
 require_once __DIR__ . '/../app/Controllers/UserController.php';
 
-$page = $_GET['page'] ?? 'users';
+$userController = new UserController();
+
+$page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$page = $page ?: 'users';
+
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+
 
 switch ($page) {
     case 'users':
-        (new UserController())->index();
+        $userController->index();
         break;
 
     case 'user_create':
-        (new UserController())->create();
+        $userController->create();
         break;
 
     case 'user_store':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            (new UserController())->store();
+            $userController->store();
         } else {
             header('Location: index.php?page=user_create');
+            exit;
         }
         break;
 
     case 'user_edit':
-        $id = $_GET['id'] ?? null;
-        (new UserController())->edit($id);
+        if ($id) {
+            $userController->edit($id);
+        } else {
+            header('Location: index.php?page=users');
+            exit;
+        }
         break;
 
     case 'user_update':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            (new UserController())->update();
+            $userController->update();
         } else {
-            header('Location: index.php?page=user_create');
+            header('Location: index.php?page=users');
+            exit;
         }
         break;
 
     case 'user_delete':
-        $id = $_GET['id'] ?? null;
-        (new UserController())->delete($id);
+        if ($id) {
+            $userController->delete($id);
+        } else {
+            header('Location: index.php?page=users');
+            exit;
+        }
         break;
 
     default:
+        http_response_code(404);
         include __DIR__ . '/../app/Views/404.php';
         break;
 }
