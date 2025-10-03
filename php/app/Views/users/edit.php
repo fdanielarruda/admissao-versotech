@@ -27,6 +27,15 @@
                 <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($user->email) ?>" required>
             </div>
 
+            <div class="mb-3">
+                <label for="colors" class="form-label">Cores</label>
+                <select class="form-control" multiple>
+                    <?php foreach ($colors as $color): ?>
+                        <option value="<?= $color->id ?>" <?= in_array($color->id, $user_colors) ? 'selected' : '' ?>><?= $color->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <button type="submit" class="btn btn-success">Salvar Alterações</button>
             <a href="index.php" class="btn btn-secondary">Cancelar</a>
         </form>

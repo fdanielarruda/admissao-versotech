@@ -26,7 +26,7 @@
 
             <div class="mb-3">
                 <label for="colors" class="form-label">Cores</label>
-                <select class="form-control" multiple>
+                <select class="form-control" multiple name="colors[]">
                     <?php foreach($colors as $color): ?>
                     <option value="<?= $color->id ?>"><?= $color->name ?></option>
                     <?php endforeach; ?>

@@ -54,7 +54,10 @@ class UserController
             exit;
         }
 
-        include __DIR__ . '/../Views/users/edit.php.php';
+        $colors = Color::list();
+        $user_colors = User::getUserColorIds($user->id);
+
+        include __DIR__ . '/../Views/users/edit.php';
     }
 
     public function delete($id)

@@ -50,6 +50,19 @@ class User
         return false;
     }
 
+    public static function getUserColorIds(int $user_id): array
+    {
+        $connection = new Connection();
+        $pdo = $connection->getConnection();
+
+        $sql = "SELECT color_id FROM user_colors WHERE user_id = :user_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_COLUMN) ?: [];
+    }
+
     public static function syncColors(int $user_id, array $color_ids)
     {
         if (empty($color_ids)) {
