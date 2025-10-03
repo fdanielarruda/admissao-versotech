@@ -56,4 +56,19 @@ class UserController
 
         include __DIR__ . '/../Views/users/edit.php.php';
     }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+
+        if ($user === null) {
+            header("HTTP/1.0 404 Not Found");
+            include __DIR__ . '/../Views/404.php';
+            exit;
+        }
+
+        User::delete($id);
+
+        header('Location: index.php?page=users');
+    }
 }

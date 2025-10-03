@@ -41,6 +41,16 @@ switch ($page) {
         $controller = new UserController();
         $controller->edit($id);
         break;
+    
+    case 'user_delete':
+        $id = $_GET['id'] ?? null;
+
+        require_once __DIR__ . '/../app/Models/User.php';
+        require_once __DIR__ . '/../app/Controllers/UserController.php';
+
+        $controller = new UserController();
+        $controller->delete($id);
+        break;
 
     default:
         include __DIR__ . '/../app/Views/404.php';

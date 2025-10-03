@@ -31,7 +31,7 @@
                         <td><?= $user->email ?></td>
                         <td>
                             <a href="?page=user_edit&id=<?= $user->id ?>" class="btn btn-warning btn-sm me-1">Editar</a>
-                            <a href="#" class="btn btn-danger btn-sm">Excluir</a>
+                            <a href="?page=user_delete&id=<?= $user->id ?>" class="btn btn-danger btn-sm">Excluir</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

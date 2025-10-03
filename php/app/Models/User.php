@@ -83,4 +83,26 @@ class User
             return false;
         }
     }
+
+    public static function delete(int $id): bool
+    {
+        if (empty($id)) {
+            return false;
+        }
+
+        $connection = new Connection();
+        $pdo = $connection->getConnection();
+
+        try {
+            $sql = "DELETE FROM users WHERE id = :id";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $success = $stmt->execute();
+
+            return $success && $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
