@@ -60,6 +60,37 @@ class UserController
         include __DIR__ . '/../Views/users/edit.php';
     }
 
+    public function update()
+    {
+        $id = $_POST['id'] ?? 0;
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? '';
+
+        $color_ids = $_POST['colors'] ?? [];
+
+        if (empty($id) || empty($name) || empty($email)) {
+            die("ID, Nome e E-mail são obrigatórios para a atualização!");
+        }
+
+        $success = User::update($id, [
+            'name' => $name,
+            'email' => $email
+        ]);
+
+        if ($success) {
+            $syncSuccess = User::syncColors($id, $color_ids);
+
+            if ($syncSuccess) {
+                header('Location: index.php?page=users&message=updated');
+                exit;
+            } else {
+                die("Erro ao sincronizar as cores do usuário.");
+            }
+        } else {
+            die("Erro ao salvar as alterações do usuário (Nome/Email).");
+        }
+    }
+
     public function delete($id)
     {
         $user = User::find($id);

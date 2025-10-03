@@ -13,7 +13,7 @@
     <div class="container">
         <h1 class="my-4">Editar usuário</h1>
 
-        <form action="edit.php?id=<?= $user->id ?>" method="POST">
+        <form action="index.php?page=user_update&id=<?= $user->id ?>" method="POST">
 
             <input type="hidden" name="id" value="<?= $user->id ?>">
 
@@ -29,7 +29,7 @@
 
             <div class="mb-3">
                 <label for="colors" class="form-label">Cores</label>
-                <select class="form-control" multiple>
+                <select class="form-control" id="colors" name="colors[]" multiple>
                     <?php foreach ($colors as $color): ?>
                         <option value="<?= $color->id ?>" <?= in_array($color->id, $user_colors) ? 'selected' : '' ?>><?= $color->name ?></option>
                     <?php endforeach; ?>

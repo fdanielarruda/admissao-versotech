@@ -57,7 +57,7 @@ class User
 
         $sql = "SELECT color_id FROM user_colors WHERE user_id = :user_id";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', $user_id);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_COLUMN) ?: [];
@@ -97,6 +97,29 @@ class User
         }
     }
 
+    public static function update(int $id, array $data): bool
+    {
+        if (empty($id) || empty($data['name']) || empty($data['email'])) {
+            return false;
+        }
+
+        $connection = new Connection();
+        $pdo = $connection->getConnection();
+
+        $sql = "UPDATE users SET name = :name, email = :email WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':name', $data['name']);
+        $stmt->bindValue(':email', $data['email']);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public static function delete(int $id): bool
     {
         if (empty($id)) {
@@ -110,7 +133,7 @@ class User
             $sql = "DELETE FROM users WHERE id = :id";
 
             $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $id);
             $success = $stmt->execute();
 
             return $success && $stmt->rowCount() > 0;
