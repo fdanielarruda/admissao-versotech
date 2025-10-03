@@ -1,7 +1,7 @@
 <?php
 
-class Connection {
-
+class Connection
+{
     private $databaseFile;
     private $connection;
 
@@ -23,7 +23,7 @@ class Connection {
 
     public function query($query)
     {
-        $result      = $this->getConnection()->query($query);
+        $result = $this->getConnection()->query($query);
 
         $result->setFetchMode(PDO::FETCH_INTO, new stdClass);
 
